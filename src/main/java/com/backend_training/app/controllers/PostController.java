@@ -1,11 +1,7 @@
 package com.backend_training.app.controllers;
 
-import com.backend_training.app.dto.PostResponse;
 import com.backend_training.app.models.Post;
 import com.backend_training.app.services.PostService;
-import com.backend_training.app.services.RateLimiterService;
-import io.github.resilience4j.ratelimiter.RateLimiter;
-import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +19,15 @@ public class PostController {
     @GetMapping
     public ResponseEntity<?> getPosts(@RequestParam(defaultValue = "10") int limit, @RequestParam(required = false) String cursor) throws Exception {
         return ResponseEntity.ok(postService.fetchPosts(cursor, limit));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPost(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(postService.getPost(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @PostMapping
