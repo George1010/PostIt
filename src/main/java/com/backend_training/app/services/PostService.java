@@ -66,5 +66,4 @@ public class PostService {
 
         return new PostResponse(posts, nextCursor);
     }
-    
 }
