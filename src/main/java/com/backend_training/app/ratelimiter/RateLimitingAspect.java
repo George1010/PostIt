@@ -59,7 +59,7 @@ public class RateLimitingAspect {
         if (bucket.getAvailableTokens() !=0) {
             return 0;
         } else {
-            EstimationProbe estimationProbe = bucket.estimateAbilityToConsume(0);
+            EstimationProbe estimationProbe = bucket.estimateAbilityToConsume(1);
             return Duration.ofNanos(estimationProbe.getNanosToWaitForRefill()).toSecondsPart();
         }
     }
