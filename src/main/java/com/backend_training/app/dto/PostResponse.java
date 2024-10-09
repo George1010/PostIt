@@ -17,12 +17,7 @@ public class PostResponse {
         this.posts = posts;
         this.nextCursor = nextCursor;
     }
-
-    public PostResponse(Post post, String nextCursor) {
-        this.posts = Collections.singletonList(post);
-        this.nextCursor = nextCursor;
-    }
-
+    
     public List<Post> getPosts() {
         return posts;
     }
