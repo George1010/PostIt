@@ -17,7 +17,7 @@ public class Post {
     private String title;
     private String content;
     private String userID;
-
+    private boolean deleted = false;
     private Date createdAt = new Date();
 
     public Post() {
@@ -67,6 +67,14 @@ public class Post {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

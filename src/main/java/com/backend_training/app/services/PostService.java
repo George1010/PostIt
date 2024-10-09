@@ -33,9 +33,10 @@ public class PostService {
     }
 
     public Post deletePost(String id) throws Exception {
-        Post post = postRepository.findById(id).orElse(null);
+        Post post = postRepository.findById(UUID.fromString(id));
         if (post != null) {
-            postRepository.delete(post);
+            post.setDeleted(true);
+            postRepository.save(post);
             return post;
         } else {
             throw new Exception("Post not found");
@@ -43,7 +44,12 @@ public class PostService {
     }
 
     public Post getPost(String id) throws Exception {
-        return postRepository.findById(id).orElseThrow(() -> new Exception("Post not found"));
+        Post post =  postRepository.findById(UUID.fromString(id));
+        if (post != null && !post.isDeleted()) {
+            return post;
+        } else {
+            throw new Exception("Post not found");
+        }
     }
 
     public PostResponse fetchPosts(String cursor, int limit) throws Exception {
@@ -53,7 +59,7 @@ public class PostService {
         if (cursor == null) {
             posts = postRepository.findTopNPosts(PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")));
         } else {
-            posts = postRepository.findByIdLessThan(UUID.fromString(cursor), PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")));
+            posts = postRepository.findByIdLessThanAndDeletedFalse(UUID.fromString(cursor), PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt")));
         }
 
         String nextCursor = posts.isEmpty() ? null : String.valueOf(posts.get(posts.size() - 1).getId());

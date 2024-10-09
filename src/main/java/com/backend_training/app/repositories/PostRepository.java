@@ -16,8 +16,10 @@ import java.util.UUID;
 @Repository
 @ComponentScan(basePackages = "com.backend_training.app")
 public interface PostRepository extends JpaRepository<Post, String> {
-    List<Post> findByIdLessThan(UUID cursor, Pageable pageable);
+    Post findById(UUID id);
 
-    @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
+    List<Post> findByIdLessThanAndDeletedFalse(UUID cursor, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.deleted = false ORDER BY p.createdAt DESC")
     List<Post> findTopNPosts(PageRequest createdAt);
 }

@@ -48,8 +48,8 @@ public class PostController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deletePost(@RequestParam String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable String id) {
         try {
             return ResponseEntity.ok(postService.deletePost(id));
         } catch (Exception e) {
