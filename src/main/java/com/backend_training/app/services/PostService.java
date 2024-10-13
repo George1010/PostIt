@@ -1,6 +1,8 @@
 package com.backend_training.app.services;
 
 import com.backend_training.app.dto.PostResponse;
+import com.backend_training.app.exceptions.InvalidPostException;
+import com.backend_training.app.exceptions.ResourceNotFoundException;
 import com.backend_training.app.models.Post;
 import com.backend_training.app.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,42 +19,63 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    private void validatePost(Post post) {
+        if (post.getTitle() == null || post.getTitle().length() < 3 || post.getTitle().length() > 100) {
+            throw new InvalidPostException("Title must be between 3 and 100 characters");
+        }
+        if (post.getContent() == null || post.getContent().length() < 10 || post.getContent().length() > 500) {
+            throw new InvalidPostException("Content must have at least 10 characters");
+        }
+        if (post.getUserID() == null || post.getUserID().isEmpty()) {
+            throw new InvalidPostException("User ID cannot be null or empty");
+        }
+    }
 
     public Post createPost(Post post) {
+        validatePost(post);
         postRepository.save(post);
         return post;
     }
 
-    public Post updatePost(Post post) throws Exception {
-        if (postRepository.existsById(String.valueOf(post.getId()))) {
-            postRepository.save(post);
-            return post;
+    public Post updatePost(Post post) {
+        Post existingPost = postRepository.findById(post.getId());
+        if (existingPost != null && !existingPost.isDeleted()) {
+            validatePost(post);
+            if (post.getTitle() != null) {
+                existingPost.setTitle(post.getTitle());
+            }
+            if (post.getContent() != null) {
+                existingPost.setContent(post.getContent());
+            }
+            postRepository.save(existingPost);
+            return existingPost;
         } else {
-            throw new Exception("Post not found");
+            throw new ResourceNotFoundException("Post not found");
         }
     }
 
-    public Post deletePost(UUID id) throws Exception {
+    public Post deletePost(UUID id) {
         Post post = postRepository.findById(id);
         if (post != null) {
             post.setDeleted(true);
             postRepository.save(post);
             return post;
         } else {
-            throw new Exception("Post not found");
+            throw new ResourceNotFoundException("Post not found");
         }
     }
 
-    public Post getPost(UUID id) throws Exception {
+
+    public Post getPost(UUID id) {
         Post post =  postRepository.findById(id);
         if (post != null && !post.isDeleted()) {
             return post;
         } else {
-            throw new Exception("Post not found");
+            throw new ResourceNotFoundException("Post not found");
         }
     }
 
-    public PostResponse fetchPosts(String cursor, int limit) throws Exception {
+    public PostResponse fetchPosts(String cursor, int limit) {
 
         List<Post> posts;
 
