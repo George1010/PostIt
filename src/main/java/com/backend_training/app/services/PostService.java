@@ -54,7 +54,7 @@ public class PostService {
         }
     }
 
-    public Post deletePost(UUID id) throws Exception {
+    public Post deletePost(UUID id) {
         Post post = postRepository.findById(id);
         if (post != null) {
             post.setDeleted(true);
@@ -66,7 +66,7 @@ public class PostService {
     }
 
 
-    public Post getPost(UUID id) throws Exception {
+    public Post getPost(UUID id) {
         Post post =  postRepository.findById(id);
         if (post != null && !post.isDeleted()) {
             return post;
