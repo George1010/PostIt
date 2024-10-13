@@ -54,8 +54,8 @@ public class PostService {
         }
     }
 
-    public Post deletePost(String id) {
-        Post post = postRepository.findById(UUID.fromString(id));
+    public Post deletePost(UUID id) throws Exception {
+        Post post = postRepository.findById(id);
         if (post != null) {
             post.setDeleted(true);
             postRepository.save(post);
@@ -65,8 +65,9 @@ public class PostService {
         }
     }
 
-    public Post getPost(String id) {
-        Post post =  postRepository.findById(UUID.fromString(id));
+
+    public Post getPost(UUID id) throws Exception {
+        Post post =  postRepository.findById(id);
         if (post != null && !post.isDeleted()) {
             return post;
         } else {
