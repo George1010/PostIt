@@ -1,11 +1,11 @@
 package com.backend_training.app.controllers;
 
 import com.backend_training.app.models.Post;
+import com.backend_training.app.ratelimiter.RateLimit;
 import com.backend_training.app.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Collections;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +26,7 @@ public class PostController {
     }
 
     @PostMapping
+    @RateLimit(capacity = 10, refillTokens = 1, duration = 60 * 1000)
     public ResponseEntity<?> createPost(@RequestBody Post post) {
         return ResponseEntity.ok(postService.createPost(post));
     }
