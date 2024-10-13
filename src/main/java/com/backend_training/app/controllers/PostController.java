@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/resources/posts")
@@ -22,7 +23,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPost(@PathVariable String id) {
+    public ResponseEntity<?> getPost(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(postService.getPost(id));
         } catch (Exception e) {
@@ -49,7 +50,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable String id) {
+    public ResponseEntity<?> deletePost(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(postService.deletePost(id));
         } catch (Exception e) {

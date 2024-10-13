@@ -1,6 +1,6 @@
 package com.backend_training.app.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -18,15 +18,14 @@ public class Post {
     private String content;
     private String userID;
     private boolean deleted = false;
-    private Date createdAt = new Date();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public Post() {
     }
-    public Post(String title, String content, String userID, Date createdAt) {
+    public Post(String title, String content, String userID) {
         this.title = title;
         this.content = content;
         this.userID = userID;
-        this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -61,11 +60,11 @@ public class Post {
         this.userID = userId;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
