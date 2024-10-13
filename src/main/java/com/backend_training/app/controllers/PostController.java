@@ -3,11 +3,8 @@ package com.backend_training.app.controllers;
 import com.backend_training.app.models.Post;
 import com.backend_training.app.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/resources/posts")
@@ -23,37 +20,21 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPost(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(postService.getPost(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(postService.getPost(id));
     }
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody Post post) {
-        try {
-            return ResponseEntity.ok(postService.createPost(post));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(postService.createPost(post));
     }
 
     @PutMapping
     public ResponseEntity<?> updatePost(@RequestBody Post post) {
-        try {
-            return ResponseEntity.ok(postService.updatePost(post));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(postService.updatePost(post));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(postService.deletePost(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", e.getMessage()));
-        }
+        return ResponseEntity.ok(postService.deletePost(id));
     }
 }
